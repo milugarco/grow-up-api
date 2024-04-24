@@ -14,4 +14,12 @@ export class DebtCreateDto {
     type: Number,
   })
   value: number;
+
+  @ApiProperty({
+    example: '2024-04-16T01:26:24.801Z',
+    description: 'Date created debt',
+    type: Date,
+    required: false,
+  })
+  createdAt?: Date;
 }

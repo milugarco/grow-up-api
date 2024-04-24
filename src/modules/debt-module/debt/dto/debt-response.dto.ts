@@ -2,11 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class DebtResponseDto {
   @ApiProperty({
-    example: 'USER ID',
+    example: 'USER NAME',
     description: 'User debt',
     type: String,
   })
-  userId: string;
+  userName: string;
 
   @ApiProperty({
     example: 'PUTAS',
@@ -24,10 +24,10 @@ export class DebtResponseDto {
 
   @ApiProperty({
     example: '11:11:11',
-    type: Date,
+    type: String,
     name: 'createdAt',
   })
-  createdAt: Date;
+  createdAt: string;
 
   @ApiProperty({
     example: '11:11:11',
