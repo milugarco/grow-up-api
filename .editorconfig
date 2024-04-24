@@ -1,0 +1,23 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+charset = utf-8
+trim_trailing_whitespace = false
+
+[*.gradle]
+indent_size = 4
+
+[*.{js,java,css,html}]
+# Remove spaces in empty braces {}
+# If you have other file types where you want this behavior, add them here
+# Note that this requires EditorConfig core v0.12.0 or newer
+indent_size = 2
+trim_empty_lines = false
