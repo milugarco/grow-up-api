@@ -2,6 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class DebtResponseDto {
   @ApiProperty({
+    example: 1,
+    description: 'Debt id',
+    type: Number,
+  })
+  id: number;
+
+  @ApiProperty({
     example: 'USER NAME',
     description: 'User debt',
     type: String,

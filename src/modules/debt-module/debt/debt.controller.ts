@@ -29,7 +29,7 @@ import { AuthUserGuard } from 'src/modules/auth/auth-modules/auth-user.guards';
 @ApiTags('Debt')
 @Controller('debts')
 export class DebtController {
-  constructor(private readonly debtService: DebtService) {}
+  constructor(private readonly debtService: DebtService) { }
 
   @Post('v1/debt')
   @ApiBearerAuth()
@@ -133,6 +133,29 @@ export class DebtController {
   ): Promise<DebtResponse> {
     const userId = req.auth.user.id;
     return await this.debtService.findOne(userId, debtId);
+  }
+
+  @Get('v1/debt/:debtId/report')
+  @ApiBearerAuth()
+  @UseGuards(AuthUserGuard)
+  @ApiOperation({ summary: 'Get a specific debt' })
+  @ApiResponse({
+    status: 200,
+    type: DebtResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid input parameters',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
+  @ApiParam({
+    name: 'debtId',
+    type: Number,
+  })
+  async reportDebts(@Req() req: any, @Param('debtId') debtId: number) {
+    const userId = req.auth.user.id;
+    return await this.debtService.reportDebts(userId, debtId);
   }
 
   @Get('v1/debt')

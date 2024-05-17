@@ -8,4 +8,4 @@ import { DebtModule } from './modules/debt-module/debt/debt.module';
   imports: [AuthModule, UserModule, DebtModule],
   providers: [PrismaService],
 })
-export class AppModule { }
+export class AppModule {}

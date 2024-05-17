@@ -21,7 +21,7 @@ export class DebtService {
   constructor(
     private readonly userService: UserService,
     private readonly prisma: PrismaService,
-  ) {}
+  ) { }
 
   async create(userId: string, body: DebtCreateDto): Promise<DebtResponse> {
     try {
@@ -203,6 +203,7 @@ export class DebtService {
         take: Number(perPage),
         skip: (page - 1) * perPage,
         select: {
+          id: true,
           users: { select: { name: true } },
           description: true,
           value: true,
@@ -220,6 +221,7 @@ export class DebtService {
       const response: DebtsResponse = {
         data: debts.map((debt) => {
           return {
+            id: debt.id,
             userName: debt.users.name,
             description: debt.description,
             value: debt.value,
@@ -261,6 +263,58 @@ export class DebtService {
       return 'Debt has been deleted';
     } catch (error) {
       throw new Error(error);
+    }
+  }
+
+  async reportDebts(userId: string, year: number) {
+    try {
+      const initialDate = new Date(`${year}-01-01T00:00:00Z`);
+      const finalDate = new Date(`${year}-12-31T23:59:59Z`);
+      const debts = await this.prisma.debt.findMany({
+        where: {
+          userId,
+          createdAt: {
+            gte: initialDate,
+            lte: finalDate,
+          },
+        },
+        select: {
+          createdAt: true,
+          id: true,
+          description: true,
+          value: true,
+        },
+        orderBy: {
+          createdAt: 'asc',
+        },
+      });
+
+      function getMonth(dateString: Date) {
+        return dateString.toString().split(' ')[1]; // Retorna o segundo elemento do array, que é o mês
+      }
+
+      // Agrupa os débitos pelo mês
+      const groupedDebts = debts.reduce((acc, debt) => {
+        const month = getMonth(debt.createdAt);
+        if (!acc[month]) {
+          acc[month] = [];
+        }
+        acc[month].push(debt);
+        return acc;
+      }, {});
+
+      // Formata o resultado para o formato desejado
+      const formattedResult = Object.entries(groupedDebts).map(
+        ([month, debtsArray]) => ({
+          month: month.padStart(2, '0'), // Garante que o mês tenha sempre dois dígitos
+          debts: debtsArray,
+        }),
+      );
+
+      return formattedResult;
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(error);
     }
   }
 }
