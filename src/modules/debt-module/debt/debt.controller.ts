@@ -135,7 +135,7 @@ export class DebtController {
     return await this.debtService.findOne(userId, debtId);
   }
 
-  @Get('v1/debt/:debtId/report')
+  @Get('v1/debt/report')
   @ApiBearerAuth()
   @UseGuards(AuthUserGuard)
   @ApiOperation({ summary: 'Get a specific debt' })
@@ -150,12 +150,12 @@ export class DebtController {
     description: 'Internal server error',
   })
   @ApiParam({
-    name: 'debtId',
+    name: 'year',
     type: Number,
   })
-  async reportDebts(@Req() req: any, @Param('debtId') debtId: number) {
+  async reportDebts(@Req() req: any, @Query('year') year: number) {
     const userId = req.auth.user.id;
-    return await this.debtService.reportDebts(userId, debtId);
+    return await this.debtService.reportDebts(userId, year);
   }
 
   @Get('v1/debt')
