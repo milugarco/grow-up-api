@@ -11,11 +11,6 @@ import { DebtResponse, DebtsResponse } from './dto/get-debt.dto';
 import { Prisma } from '@prisma/client';
 import { getPageInfo } from 'src/services/pagination.service';
 
-/*
-  LEMBRAR DE VER A BIBLIOTECA PARA FORMATAR DATA
-  CRIAR ROTA PRA CALCULAR OS GASTOS MENSAIS
-*/
-
 @Injectable()
 export class DebtService {
   constructor(
@@ -268,11 +263,12 @@ export class DebtService {
 
   async reportDebts(userId: string, year: number) {
     try {
-      const initialDate = new Date(`${year}-01-01T00:00:00Z`);
-      const finalDate = new Date(`${year}-12-31T23:59:59Z`);
+      const initialDate: Date = new Date(`${year}-01-01T00:00:00Z`);
+      console.log(initialDate);
+      const finalDate: Date = new Date(`${year}-12-31T23:59:59Z`);
+      console.log(finalDate);
       const debts = await this.prisma.debt.findMany({
         where: {
-          userId,
           createdAt: {
             gte: initialDate,
             lte: finalDate,
@@ -293,7 +289,6 @@ export class DebtService {
         return dateString.toString().split(' ')[1]; // Retorna o segundo elemento do array, que é o mês
       }
 
-      // Agrupa os débitos pelo mês
       const groupedDebts = debts.reduce((acc, debt) => {
         const month = getMonth(debt.createdAt);
         if (!acc[month]) {
@@ -303,10 +298,9 @@ export class DebtService {
         return acc;
       }, {});
 
-      // Formata o resultado para o formato desejado
       const formattedResult = Object.entries(groupedDebts).map(
         ([month, debtsArray]) => ({
-          month: month.padStart(2, '0'), // Garante que o mês tenha sempre dois dígitos
+          month: month.padStart(2, '0'),
           debts: debtsArray,
         }),
       );

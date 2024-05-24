@@ -135,7 +135,7 @@ export class DebtController {
     return await this.debtService.findOne(userId, debtId);
   }
 
-  @Get('v1/debt/report')
+  @Get('v1/debt/report/:year')
   @ApiBearerAuth()
   @UseGuards(AuthUserGuard)
   @ApiOperation({ summary: 'Get a specific debt' })
@@ -153,8 +153,9 @@ export class DebtController {
     name: 'year',
     type: Number,
   })
-  async reportDebts(@Req() req: any, @Query('year') year: number) {
+  async reportDebts(@Req() req: any, @Param('year') year: number) {
     const userId = req.auth.user.id;
+    console.log(req.auth.user);
     return await this.debtService.reportDebts(userId, year);
   }
 

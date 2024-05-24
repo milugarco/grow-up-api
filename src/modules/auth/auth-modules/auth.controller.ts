@@ -36,6 +36,7 @@ export class AuthController {
     @Query('email') email: string,
     @Query('password') password: string,
   ): Promise<string> {
+    console.log(email);
     return await this.authService.login(email, password);
   }
 }
