@@ -16,7 +16,7 @@ export class DebtService {
   constructor(
     private readonly userService: UserService,
     private readonly prisma: PrismaService,
-  ) { }
+  ) {}
 
   async create(userId: string, body: DebtCreateDto): Promise<DebtResponse> {
     try {
@@ -186,6 +186,7 @@ export class DebtService {
       }
 
       const where: Prisma.DebtWhereInput = {
+        userId,
         createdAt: {
           gte: initialDate,
           lte: finalDate,
@@ -269,6 +270,8 @@ export class DebtService {
       console.log(finalDate);
       const debts = await this.prisma.debt.findMany({
         where: {
+          userId,
+          deleteAt: null,
           createdAt: {
             gte: initialDate,
             lte: finalDate,
